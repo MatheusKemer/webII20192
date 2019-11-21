@@ -7,6 +7,7 @@ package beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.joda.time.DateTime;
 
 /**
  *

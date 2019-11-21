@@ -12,8 +12,17 @@
     </head>
     <body>
         <div class="content">
-            <c:import url="/cabecalho_gerente.jsp"/>
-            
+            <c:choose>
+                <c:when test="${LoginBean.getTipo() == \"Gerente\"}">
+                   <c:import url="/cabecalho_gerente.jsp"/>
+                </c:when>
+                <c:when test="${LoginBean.getTipo() == \"Funcionario\"}">
+                   <c:import url="/cabecalho_funcionario.jsp"/>
+                </c:when>
+                <c:otherwise>
+                    <c:import url="/cabecalho_cliente.jsp"/>
+                </c:otherwise>
+            </c:choose>
             <div class="form-holder">
                 <h1>Atendimentos</h1>
                 <table cellpadding=0 cellspacing=0>
@@ -57,6 +66,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <c:if test='${LoginBean.getTipo() == "Cliente"}'>
+                    <button href="/AtendimentoServlet?action=new" class="text-center"> Novo Atendimento </button>
+                </c:if>
             </div>
             <div class="modal hidden">
                 <div class="modal-body hidden">

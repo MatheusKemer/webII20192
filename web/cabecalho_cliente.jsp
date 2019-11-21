@@ -11,16 +11,13 @@
 <c:set var="LoginBean" value="${sessionScope.LoginBean}" />
 <c:choose>
      <c:when test="${LoginBean == null}">
-        <c:redirect url="/login.jsp">
-            <c:param name="msg" value="Usuário deve se autenticar para acessar o sistema!"/>
-        </c:redirect>
     </c:when>
     <c:otherwise>
     </c:otherwise>
 </c:choose>
 
 <header class="cliente-header">
+    <a href="AtendimentoServlet">Atendimentos</a>
     <a href="alterar-dados.jsp">Alterar Dados</a>
-    <a href="novo-atendimento.jsp">Criar Atendimento</a>
     <a href="LogoutServlet">Logout</a>
 </header>

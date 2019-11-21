@@ -8,14 +8,10 @@ package servlets;
 import beans.Atendimento;
 import beans.LoginBean;
 import facade.AtendimentoFacade;
-import facade.UsuariosFacade;
-import facade.EstadoFacade;
 import facade.ProdutoFacade;
 import facade.TipoAtendimentoFacade;
 import java.io.IOException;
-import java.io.PrintWriter;
-import static java.lang.System.out;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,15 +51,24 @@ public class AtendimentoServlet extends HttpServlet {
         //    return;
         //}
         
-        List<Atendimento> atendimentos = AtendimentoFacade.buscarTodos();
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/atendimentos.jsp");
-        request.setAttribute("listagemAtendimentos", atendimentos);
-        rd.forward(request, response);
-    }
-    
-    
-    private void index(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String action = (String)request.getParameter("action");
+        if(null != action){
+            switch (action) {
+                case "list":
+                    index(bean.getId(), request, response);
+                    return;
+                case "formNew":
+                    newObject(request, response);
+                    return;
+                case "new":
+                    create(bean.getId(), request, response);
+                    return;
+                default:
+                    index(1, request, response);
+            }
+        } else {
+            index(bean.getId(), request, response);
+        }
     }
     
     private void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -81,29 +86,38 @@ public class AtendimentoServlet extends HttpServlet {
         }
     }
     
+    private void index(int usuarioId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Atendimento> atendimentos = null;
+                
+        if (usuarioId == 0){
+            atendimentos = AtendimentoFacade.buscarTodos();
+        } else {
+            atendimentos = AtendimentoFacade.buscarPorUsuario(usuarioId);
+        }
+        
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/atendimentos.jsp");
+        request.setAttribute("listagemAtendimentos", atendimentos);
+        rd.forward(request, response);
+    }
+    
     private void newObject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/atendimento.jsp");
+        RequestDispatcher rd = getServletContext().getRequestDispatcher("/criar-atendimento.jsp");
         request.setAttribute("produtos", ProdutoFacade.buscarTodos());
         request.setAttribute("tiposAtendimento", TipoAtendimentoFacade.buscarTodos());
-        request.setAttribute("clientes", UsuariosFacade.buscarTodos());
         
         rd.forward(request, response);
     }
 
     private void create(int usuarioId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Atendimento atendimento = new Atendimento();
-        atendimento.setDesc(request.getParameter("desc"));
-        atendimento.setData(Date.valueOf(request.getParameter("data")));
-        atendimento.setClienteId(Integer.parseInt(request.getParameter("clienteId")));
+        atendimento.setDesc(request.getParameter("descricao"));
         atendimento.setProdutoId(Integer.parseInt(request.getParameter("produtoId")));
         atendimento.setTipoAtendimentoId(Integer.parseInt(request.getParameter("tipoAtendimentoId")));
-
-        if (request.getParameter("status") == null){
-            atendimento.setStatus('N');
-        } else {
-            atendimento.setStatus('S');
-        }
+        Date data = new Date();
+        atendimento.setData(data);
+        atendimento.setStatus("Aberto");
         atendimento.setUsuarioId(usuarioId);
+        
         AtendimentoFacade.inserir(atendimento);
         
         response.sendRedirect("AtendimentoServlet?action=index");

@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c"uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,11 +11,8 @@
     </head>
     <body>
         <div class="content">
-            <header class="cliente-header">
-                <a href="cliente.jsp">Home</a>
-                <a href="novo-atendimento.jsp">Criar Atendimento</a>
-                <a href="/Telas">Logout</a>
-            </header>
+            <c:import url="/cabecalho_cliente.jsp"/>
+            
             <div class="form-holder">
                 <h1>Alterar Dados</h1>
                 <form action=''>
