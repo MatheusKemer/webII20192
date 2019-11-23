@@ -36,4 +36,8 @@ public class UsuariosFacade {
         UsuarioDAO dao = new UsuarioDAO();
         dao.remover(Integer.parseInt(id));
     }
+    public static Usuario buscarPorEmail(String email){
+        UsuarioDAO dao = new UsuarioDAO();
+        return dao.buscaPorEmail(email);
+    }
 }

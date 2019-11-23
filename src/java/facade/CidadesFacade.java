@@ -7,7 +7,6 @@ package facade;
 
 import DAO.CidadeDAO;
 import beans.Cidade;
-import beans.Estado;
 import java.util.List;
 
 /**

@@ -18,6 +18,6 @@
 
 <header class="cliente-header">
     <a href="AtendimentoServlet">Atendimentos</a>
-    <a href="alterar-dados.jsp">Alterar Dados</a>
+    <a href="UsuariosServlet?action=formUpdate">Alterar Dados</a>
     <a href="LogoutServlet">Logout</a>
 </header>

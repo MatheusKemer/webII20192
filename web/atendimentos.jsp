@@ -13,10 +13,10 @@
     <body>
         <div class="content">
             <c:choose>
-                <c:when test="${LoginBean.getTipo() == \"Gerente\"}">
+                <c:when test="${usuario.getTipo() == \"Gerente\"}">
                    <c:import url="/cabecalho_gerente.jsp"/>
                 </c:when>
-                <c:when test="${LoginBean.getTipo() == \"Funcionario\"}">
+                <c:when test="${usuario.getTipo() == \"Funcionario\"}">
                    <c:import url="/cabecalho_funcionario.jsp"/>
                 </c:when>
                 <c:otherwise>
@@ -43,27 +43,6 @@
                                 <td><button class="questionView">Ver</button></td>
                             </tr>
                         </c:forEach>
-                        <tr>
-                            <td>20</td>
-                            <td>Crítica</td>
-                            <td class="questStat">Concluído</td>
-                            <td class="questDate">12/09/2019</td>
-                            <td><button class="questionView">Ver</button></td>
-                        </tr>
-                        <tr>
-                            <td>25</td>
-                            <td>Informações</td>
-                            <td class="questStat">Aberto</td>
-                            <td class="questDate">20/09/2019</td>
-                            <td><button class="questionView">Ver</button></td>
-                        </tr>
-                        <tr>
-                            <td>28</td>
-                            <td>Elogio</td>
-                            <td class="questStat">Aberto</td>
-                            <td class="questDate">07/11/2019</td>
-                            <td><button class="questionView">Ver</button></td>
-                        </tr>
                     </tbody>
                 </table>
                 <c:if test='${LoginBean.getTipo() == "Cliente"}'>

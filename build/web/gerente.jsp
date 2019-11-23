@@ -11,10 +11,11 @@
     <body>
         <div class="content">
             <c:import url="/cabecalho_gerente.jsp"/>
+            
             <div class="form-holder">
                 <h1>Bem vindo!</h1>
-                <h2>Atendimentos criados: <span>400</span></h2>
-                <h2>Atendimentos abertos: <span>200</span> - <span>50%</span></h2>
+                <h2>Atendimentos criados: <span><c:out value="${atendimentosTotais}" /></span></h2>
+                <h2>Atendimentos abertos: <span><c:out value="${atendimentosAbertos}" /></span> - <span><c:out value="${(atendimentosAbertos/atendimentosTotais)*100}" />%</span></h2>
                 <table cellpadding=0 cellspacing=0 class="table-manager">
                     <thead>
                         <th>Tipo</th>
@@ -23,19 +24,19 @@
                     <tbody>
                         <tr>
                             <td>Críticas</td>
-                            <td>100/200</td>
+                            <td><c:out value="${criticasAbertas}" />/<c:out value="${criticas}" /></td>
                         </tr>
                         <tr>
-                            <td>Elogios</td>
-                            <td>2/10</td>
+                            <td>Reclamações</td>
+                            <td><c:out value="${reclamacoesAbertas}" />/<c:out value="${reclamacoes}" /></td>
                         </tr>
                         <tr>
                             <td>Dúvidas</td>
-                            <td>78/90</td>
+                            <td><c:out value="${duvidasAbertas}" />/<c:out value="${duvidas}" /></td>
                         </tr>
                         <tr>
                             <td>Sugestões</td>
-                            <td>20/110</td>
+                            <td><c:out value="${sugestoesAbertas}" />/<c:out value="${sugestoes}" /></td>
                         </tr>
                     </tbody>
                 </table>

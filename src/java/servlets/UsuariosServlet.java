@@ -12,6 +12,7 @@ import facade.CidadesFacade;
 import facade.UsuariosFacade;
 import facade.EstadoFacade;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -61,7 +62,7 @@ public class UsuariosServlet extends HttpServlet {
                     show(request, response);
                     return;
                 case "formUpdate":
-                    edit(request, response);
+                    edit("1", request, response);
                     return;
                 case "remove":
                     delete(request, response);
@@ -84,25 +85,9 @@ public class UsuariosServlet extends HttpServlet {
     }
 
     private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Cliente> clientesCadastrados = UsuariosFacade.buscarTodos();
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/clientesListar.jsp");
-        request.setAttribute("listagemClientes", clientesCadastrados);
-        rd.forward(request, response);
     }
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cliente cliente = null;
-                    
-        String idCliente = (String) request.getParameter("id");
-        if (idCliente != null){
-            //cliente = UsuariosFacade.buscar(idCliente);
-        }
-
-        if (cliente != null){
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/clienteVisualizar.jsp");
-            request.setAttribute("cliente", cliente);
-            rd.forward(request, response);
-        }
     }
 
     private void newObject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -113,25 +98,24 @@ public class UsuariosServlet extends HttpServlet {
         rd.forward(request, response);
     }
     
-    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cliente cliente = null;
+    private void edit(String usuarioId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Usuario usuario = null;
                     
-        String idCliente = (String) request.getParameter("id");
-        if (idCliente != null){
-            //cliente = UsuariosFacade.buscar(idCliente);
-        }
+        usuario = UsuariosFacade.buscar(usuarioId);
 
-        if (cliente != null){
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/clientesForm.jsp");
-            request.setAttribute("cliente", cliente);
+        if (usuario != null){
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/alterar-dados.jsp");
+            request.setAttribute("usuario", usuario);
             request.setAttribute("editing", true);
-            request.setAttribute("action", "ClientesServlet?action=update");
+            request.setAttribute("action", "UsuariosServlet?action=update");
             request.setAttribute("estados", EstadoFacade.listar());
-            request.setAttribute("cidades", CidadesFacade.listarTodasDoEstado(String.valueOf(cliente.getCidade().getEstado().getId())));
-            request.setAttribute("titleLabel", "Editando Cliente");
+            request.setAttribute("cidades", CidadesFacade.listarTodasDoEstado(String.valueOf(usuario.getCidade().getEstado().getId())));
+            request.setAttribute("titleLabel", "Editando Usuário");
             rd.forward(request, response);
         }        
     }
+    
+    // ESTOU FAZENDO AGORA A PARTE DE DEIXAR O MESMO FORM PARA CRIAR UM USUÁRIO OU EDITA-LO
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idCliente = (String) request.getParameter("id");
@@ -143,21 +127,23 @@ public class UsuariosServlet extends HttpServlet {
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Cliente cliente = new Cliente();
-        cliente = getClienteParameters(request);
-        UsuariosFacade.alterar(cliente);
+        Usuario usuario = new Usuario();
+        usuario = getUsuarioParameters(request);
+        UsuariosFacade.alterar(usuario);
         
-        response.sendRedirect("ClientesServlet");
+        response.sendRedirect("UsuariosServlet?action=formUpdate");
     }
 
-    private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, NoSuchAlgorithmException {
         Usuario usuario = new Usuario();
-        usuario = getClienteParameters(request);
+        usuario = getUsuarioParameters(request);
         
         if (usuario.validPasswordConfirmation()){
+            usuario.setSenha(Usuario.converteSenha(usuario.getSenha()));
             UsuariosFacade.inserir(usuario);
         } else {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/UsuariosServlet?action=formNew");
+            request.setAttribute("usuario", usuario);
             request.setAttribute("msg", "Senha e confirmação de senha não conferem!");
             rd.forward(request, response);
         }
@@ -165,7 +151,7 @@ public class UsuariosServlet extends HttpServlet {
         response.sendRedirect("usuarios.jsp");
     }
     
-    private Cliente getClienteParameters(HttpServletRequest request){
+    private Usuario getUsuarioParameters(HttpServletRequest request){
         Usuario usuario = new Usuario();
         if (request.getParameter("id") != null){
             usuario.setId(Integer.parseInt(request.getParameter("id")));

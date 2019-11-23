@@ -1,3 +1,4 @@
+<%@page import="beans.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -8,6 +9,25 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
     </head>
     <body>
+        <% 
+            String alert = "";
+            alert = (String)request.getAttribute("msg"); 
+            if (alert != null) {
+                out.println("<div class=\"alert alert-secondary\" role=\"alert\">" + alert + "</div>");    
+            } else {
+                alert = (String)request.getParameter("msg");
+                if (alert != null) {
+                    out.println("<div class=\"alert alert-secondary\" role=\"alert\">" + alert + "</div>");
+                }
+            }
+            
+            if (session.getAttribute("usuario") != null){
+                RequestDispatcher rd = getServletContext().getRequestDispatcher("/AtendimentoServlet");
+                request.setAttribute("msg", "Você já está logado!");
+                rd.forward(request, response);
+            }
+            
+        %>
         <div class="content">
             <div class="form-holder">
                 <h1>Login</h1>

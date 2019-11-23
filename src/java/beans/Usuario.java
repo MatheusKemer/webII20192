@@ -107,7 +107,7 @@ public class Usuario implements Serializable{
     }
 
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        this.cpf = cpf.replaceAll("\\D+","");;
     }
 
     public void setNome(String nome) {
@@ -131,7 +131,7 @@ public class Usuario implements Serializable{
     }
 
     public void setCep(String cep) {
-        this.cep = cep;
+        this.cep = cep.replaceAll("\\D+","");;
     }
 
     public void setCidadeId(int cidadeId) {
@@ -164,8 +164,8 @@ public class Usuario implements Serializable{
     
     public Usuario verifyLogin() {
         UsuarioDAO dao = new UsuarioDAO();
-        Usuario response = dao.checkLogin(this);
-        return response;
+        Usuario user = dao.checkLogin(this);
+        return user;
     }
     
     public static String converteSenha(String senha) throws NoSuchAlgorithmException, UnsupportedEncodingException{

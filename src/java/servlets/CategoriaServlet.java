@@ -8,6 +8,7 @@ package servlets;
 import DAO.CategoriaDAO;
 import beans.Categoria;
 import beans.LoginBean;
+import beans.Usuario;
 import facade.CategoriaFacade;
 import facade.CidadesFacade;
 import facade.EstadoFacade;
@@ -45,14 +46,14 @@ public class CategoriaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession();
-        LoginBean bean = (LoginBean)session.getAttribute("LoginBean"); 
+        Usuario usuario = (Usuario)session.getAttribute("usuario"); 
 
-        //if (bean == null){
-        //    RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-        //    request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema!");
-        //    rd.forward(request, response);
-        //    return;
-        //}
+        if (usuario == null){
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema!");
+            rd.forward(request, response);
+            return;
+        }
         
         String action = (String)request.getParameter("action");
         if(null != action){
@@ -128,11 +129,12 @@ public class CategoriaServlet extends HttpServlet {
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Cliente cliente = new Cliente();
-        cliente = getClienteParameters(request);
-        UsuariosFacade.alterar(cliente);
+        Categoria categoria = new Categoria();
+        categoria = getCategoriaParameters(request);
         
-        response.sendRedirect("ClientesServlet");
+        CategoriaFacade.alterar(categoria);
+        
+        response.sendRedirect("CategoriaServlet");
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

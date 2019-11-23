@@ -6,7 +6,6 @@
 package DAO;
 
 import beans.Cidade;
-import beans.Estado;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -17,6 +17,7 @@ import facade.ProdutoFacade;
 import facade.UsuariosFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,14 +48,14 @@ public class ProdutoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession();
-        LoginBean bean = (LoginBean)session.getAttribute("LoginBean"); 
+        Usuario usuario = (Usuario)session.getAttribute("usuario"); 
 
-        //if (bean == null){
-        //    RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-        //    request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema!");
-        //    rd.forward(request, response);
-        //    return;
-        //}
+        if (usuario == null){
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema!");
+            rd.forward(request, response);
+            return;
+        }
         
         String action = (String)request.getParameter("action");
         if(null != action){
@@ -89,6 +90,7 @@ public class ProdutoServlet extends HttpServlet {
         List<Produto> produtosCadastrados = ProdutoFacade.buscarTodos();
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/produtos.jsp");
         request.setAttribute("listagemProdutos", produtosCadastrados);
+        request.setAttribute("categorias", CategoriaFacade.buscarTodos());
         rd.forward(request, response);
     }
 
@@ -134,7 +136,7 @@ public class ProdutoServlet extends HttpServlet {
         Produto produto = new Produto();
         produto = getProdutoParameters(request);
         ProdutoFacade.alterar(produto);
-        
+        out.println("O PRODUTO " + produto.getNome() + " COM DESCRICAO " + produto.getDescricao() + " E PESO " + produto.getPeso());
         response.sendRedirect("ProdutoServlet");
     }
 
@@ -152,10 +154,23 @@ public class ProdutoServlet extends HttpServlet {
         if (request.getParameter("id") != null){
             produto.setId(Integer.parseInt(request.getParameter("id")));
         }
-        produto.setNome(request.getParameter("nome"));
-        produto.setPeso(Integer.parseInt(request.getParameter("peso")));
-        produto.setCategoriaId(Integer.parseInt(request.getParameter("categoriaId")));
-        produto.setDescription(request.getParameter("description"));
+        
+        if (request.getParameter("nome") != null && !request.getParameter("nome").isEmpty()){
+            out.println("O NOME EHHHH " + request.getParameter("nome"));
+            produto.setNome(request.getParameter("nome"));
+        }
+        
+        if (request.getParameter("peso") != null && !request.getParameter("peso").isEmpty()){
+            produto.setPeso(Integer.parseInt(request.getParameter("peso")));
+        }
+        
+        if (request.getParameter("categoriaId") != null && request.getParameter("categoriaId") != null){
+            produto.setCategoriaId(Integer.parseInt(request.getParameter("categoriaId")));
+        }
+        
+        if (request.getParameter("description") != null && !request.getParameter("description").isEmpty()){
+            produto.setDescricao(request.getParameter("description"));
+        }
         
         return produto;
     }

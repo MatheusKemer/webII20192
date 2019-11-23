@@ -35,7 +35,7 @@ and open the template in the editor.
                         <h1>SAC Online</h1>
                         <div class="button-box">
                             <a href="UsuariosServlet?action=formNew" class="container-box-button">Cadastrar</a>
-                            <a href="LoginServlet" class="container-box-button">Já sou cadastrado</a>
+                            <a href="login.jsp" class="container-box-button">Já sou cadastrado</a>
                         </div>  
                     </div>
                 </div>

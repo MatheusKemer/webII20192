@@ -26,7 +26,7 @@
                         <c:forEach items="${listagemCategorias}" var="categoria" >
                             <tr>
                                 <td><c:out value="${categoria.id}" /></td>
-                                <td><c:out value="${categoria.nome}" /></td>
+                                <td id="title${categoria.id}"><c:out value="${categoria.nome}" /></td>
                                 <td><button class="catView">Ver</button></td>
                                 <td class="delete cat">X</td>
                             </tr>
@@ -36,9 +36,9 @@
                 <div class="modal hidden">
                     <div class="modal-body hidden">
                         <h2 id="title"></h2>
-                        <form>
-                            <input type="text" class="hidden" id="catID">
-                            <input type="text" class="hidden catChange" placeholder="Novo Título">
+                        <form action="CategoriaServlet?action=update" method="POST">
+                            <input name="id" type="text" class="hidden" id="catID">
+                            <input name="nome" type="text" class="hidden catChange" placeholder="Novo Título">
                             <button type="submit" class="catChange hidden">Alterar</button>
                             <button class="catEdit">Editar</button>
                             <button class="catCancel hidden">Cancelar</button>
@@ -53,13 +53,6 @@
                             <input class="hidden" id="delete-id">
                             <button type="submit">Excluir</button>
                         </form>
-                    </div>
-                </div>
-                <div class="hidden">
-                    <div class="table-data">
-                        <div id="20">
-                            <p id="title20">Pele</p>
-                        </div>
                     </div>
                 </div>
                 <a href="CategoriaServlet?action=formNew">Criar Categoria</a>

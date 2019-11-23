@@ -7,6 +7,7 @@ package servlets;
  */
 import beans.Usuario;
 import beans.LoginBean;
+import facade.UsuariosFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.System.out;
@@ -45,29 +46,19 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
 
-        Usuario user = new Usuario(email, senha);
+        Usuario user = UsuariosFacade.buscarPorEmail(email);
         
-        Usuario login_response = user.verifyLogin();
-
-        if (login_response != null) {
+        if ((user != null) && (user.getSenha().equals(Usuario.converteSenha(senha))) ) {
            HttpSession session = request.getSession();
-           //session.setAttribute("nome", DaoResponse);
 
-           LoginBean bean = new LoginBean();
-           bean.setName(login_response.getNome());
-           bean.setId(login_response.getId());
+           session.setAttribute("usuario", user);
            
-           String tipo = login_response.getTipo(); 
-           bean.setTipo(tipo);
-            
-           session.setAttribute("LoginBean", bean);
-           
-           switch (tipo){
+           switch (user.getTipo()){
                 case("Gerente"):
-                   response.sendRedirect("gerente.jsp");
+                   response.sendRedirect("GerenteServlet");
                    break;
                 case("Funcionario"):
-                   response.sendRedirect("funcionario.jsp");
+                   response.sendRedirect("AtendimentoServlet");
                    break;
                 case("Cliente"):
                    response.sendRedirect("cliente.jsp");

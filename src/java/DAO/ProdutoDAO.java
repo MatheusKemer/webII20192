@@ -67,10 +67,11 @@ public class ProdutoDAO {
         
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("INSERT INTO tb_produto (nome_produto, peso_produto, id_categoria) VALUES (?, ?, ?)");
+            st = con.prepareStatement("INSERT INTO tb_produto (nome_produto, peso_produto, desc_produto, id_categoria) VALUES (?, ?, ?, ?)");
             st.setString(1, produto.getNome());
             st.setInt(2, produto.getPeso());
-            st.setInt(3, produto.getCategoriaId());
+            st.setString(1, produto.getDescricao());
+            st.setInt(4, produto.getCategoriaId());
             
             st.executeUpdate();
         }
@@ -107,4 +108,30 @@ public class ProdutoDAO {
         }
     }
 
+    public void atualizar(Produto produto){
+        Connection con = null;
+        PreparedStatement st = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("update tb_produto set nome_produto = ?, peso_produto = ?, id_categoria = ?, desc_produto = ? where id_produto = ?");
+            st.setString(1, produto.getNome());
+            st.setInt(2, produto.getPeso());
+            st.setInt(3, produto.getCategoriaId());
+            st.setString(4, produto.getDescricao());
+            st.setInt(5, produto.getId());
+            
+            st.executeUpdate();
+        }
+        catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (st!=null)
+                try {st.close();} catch (SQLException e){}
+            if (con!=null)
+                try {con.close();} catch (SQLException e){}
+        }
+    }
+    
 }

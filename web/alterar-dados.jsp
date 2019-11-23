@@ -12,25 +12,10 @@
     <body>
         <div class="content">
             <c:import url="/cabecalho_cliente.jsp"/>
+            <c:set var="cliente" value="${sessionScope.Usuario}" scope="session" />
             
             <div class="form-holder">
-                <h1>Alterar Dados</h1>
-                <form action=''>
-                    <input type="text" placeholder="Nome">
-                    <input type="text" disabled placeholder="CPF">
-                    <input type="text" disabled placeholder="Email">
-                    <input type="text" placeholder="Endereço">
-                    <input type="text" id="housenumber" placeholder="Nº">
-                    <input type="text" placeholder="Comp">
-                    <input type="text" placeholder="Bairro">
-                    <input type="text" id="cep" placeholder="CEP">
-                    <input type="text" placeholder="Cidade">
-                    <input type="text" placeholder="UF">
-                    <input type="phone" id="phone" placeholder="Telefone">
-                    <input type="password" id="pass" placeholder="Senha">
-                    <input type="password" id="cpass" placeholder="Confirmar Senha">
-                    <button type="submit">Alterar</button>
-                </form>
+                <c:import url="/usuarioForm.jsp"/>
             </div>
         </div>
         <script type="text/javascript" src="js/main.js"></script>

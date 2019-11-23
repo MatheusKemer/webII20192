@@ -21,7 +21,7 @@ import java.util.List;
  * @author matheus
  */
 public class UsuarioDAO {
-        public Usuario checkLogin(Usuario user){
+    public Usuario checkLogin(Usuario user){
         Connection con = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -120,20 +120,73 @@ public class UsuarioDAO {
         
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("SELECT id_usuario, cpf_usuario, nome_usuario, email_usuario, data_usuario, tb_usuario.id_usuario, rua_usuario, nr_usuario, cep_usuario, tb_cidade.nome_cidade, tb_cidade.id_estado, nome_estado, sigla_estado FROM tb_usuario, tb_cidade, tb_estado WHERE id_usuario = ? AND tb_usuario.id_cidade = tb_cidade.id_cidade AND tb_cidade.id_estado = tb_estado.id_estado");
+            st = con.prepareStatement("SELECT id_usuario, cpf_usuario, nome_usuario, email_usuario, data_usuario, tb_usuario.id_usuario, tb_usuario.id_cidade, rua_usuario, nr_usuario, cep_usuario, tb_cidade.nome_cidade, tb_cidade.id_estado, nome_estado, sigla_estado FROM tb_usuario, tb_cidade, tb_estado WHERE id_usuario = ? AND tb_usuario.id_cidade = tb_cidade.id_cidade AND tb_cidade.id_estado = tb_estado.id_estado");
             st.setInt(1, idUsuario);
             
             rs = st.executeQuery();
             while (rs.next()) {
-                usuario.setId( rs.getInt("id_cliente") );
-                usuario.setNome( rs.getString("nome_cliente") );
-                usuario.setCpf( rs.getString("cpf_cliente") );
-                usuario.setEmail( rs.getString("email_cliente") );
-                usuario.setRua( rs.getString("rua_cliente") );
+                usuario.setId( rs.getInt("id_usuario") );
+                usuario.setNome( rs.getString("nome_usuario") );
+                usuario.setCpf( rs.getString("cpf_usuario") );
+                usuario.setEmail( rs.getString("email_usuario") );
+                usuario.setRua( rs.getString("rua_usuario") );
                 usuario.setCidadeId( rs.getInt("id_cidade") );
-                usuario.setCep( rs.getString("cep_cliente") );
-                usuario.setNumero( rs.getString("nr_cliente") );
-                usuario.setData( rs.getDate("data_cliente") ); 
+                usuario.setCep( rs.getString("cep_usuario") );
+                usuario.setNumero( rs.getString("nr_usuario") );
+                
+                cidade.setIdEstado( rs.getInt("id_estado"));
+                cidade.setId( Integer.parseInt(rs.getString("id_cidade")));
+                cidade.setNome( rs.getString("nome_cidade"));
+                
+                estado.setId( rs.getInt("id_estado"));
+                estado.setNome( rs.getString("nome_estado"));
+                estado.setUf( rs.getString("sigla_estado"));
+                
+                cidade.setEstado(estado);
+                usuario.setCidade(cidade);
+            }
+            
+            return usuario;
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (rs!=null)
+                try {rs.close();} catch (Exception e){}
+            if (st!=null)
+                try {st.close();} catch (Exception e){}
+            if (con!=null)
+                try {con.close();} catch (Exception e){}
+        }
+    }
+    
+    public Usuario buscaPorEmail(String email) {
+        Usuario usuario = null;
+        Cidade cidade = new Cidade();
+        Estado estado = new Estado();
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("SELECT id_usuario, senha_usuario, tipo_usuario, cpf_usuario, nome_usuario, email_usuario, data_usuario, tb_usuario.id_usuario, tb_usuario.id_cidade, rua_usuario, nr_usuario, cep_usuario, tb_cidade.nome_cidade, tb_cidade.id_estado, nome_estado, sigla_estado FROM tb_usuario, tb_cidade, tb_estado WHERE email_usuario = ? AND tb_usuario.id_cidade = tb_cidade.id_cidade AND tb_cidade.id_estado = tb_estado.id_estado");
+            st.setString(1, email);
+            
+            rs = st.executeQuery();
+            while (rs.next()) {
+                usuario = new Usuario();
+                usuario.setId( rs.getInt("id_usuario") );
+                usuario.setNome( rs.getString("nome_usuario") );
+                usuario.setCpf( rs.getString("cpf_usuario") );
+                usuario.setEmail( rs.getString("email_usuario") );
+                usuario.setRua( rs.getString("rua_usuario") );
+                usuario.setCidadeId( rs.getInt("id_cidade") );
+                usuario.setCep( rs.getString("cep_usuario") );
+                usuario.setNumero( rs.getString("nr_usuario") );
+                usuario.setSenha( rs.getString("senha_usuario") );
+                usuario.setTipo(rs.getString("tipo_usuario"));
                 
                 cidade.setIdEstado( rs.getInt("id_estado"));
                 cidade.setId( Integer.parseInt(rs.getString("id_cidade")));
@@ -198,17 +251,18 @@ public class UsuarioDAO {
         
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("INSERT INTO tb_usuario (cpf_usuario, nome_usuario, email_usuario, rua_usuario, telefone_usuario, nr_usuario, cep_usuario, id_cidade, senha_usuario, bairro_usuario, complemente_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            st = con.prepareStatement("INSERT INTO tb_usuario (cpf_usuario, nome_usuario, email_usuario, rua_usuario, telefone_usuario, nr_usuario, cep_usuario, id_cidade, senha_usuario, bairro_usuario, complemente_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             st.setString(1, usuario.getCpf());
             st.setString(2, usuario.getNome());
             st.setString(3, usuario.getEmail());
             st.setString(4, usuario.getRua());
-            st.setInt(5, Integer.valueOf(usuario.getNumero()));
-            st.setString(6, usuario.getCep());
-            st.setInt(7, usuario.getCidadeId());
-            st.setString(8, usuario.getSenha());
-            st.setString(9, usuario.getBairro());
-            st.setString(10, usuario.getComplemento());
+            st.setString(5, usuario.getTelefone());
+            st.setInt(6, Integer.valueOf(usuario.getNumero()));
+            st.setString(7, usuario.getCep());
+            st.setInt(8, usuario.getCidadeId());
+            st.setString(9, usuario.getSenha());
+            st.setString(10, usuario.getBairro());
+            st.setString(11, usuario.getComplemento());
             
             st.executeUpdate();
         }

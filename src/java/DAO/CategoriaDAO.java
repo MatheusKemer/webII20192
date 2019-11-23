@@ -72,6 +72,29 @@ public class CategoriaDAO {
         }
     }
     
+    public void atualizar(Categoria categoria){
+        Connection con = null;
+        PreparedStatement st = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("UPDATE tb_categoria SET nome_categoria = ? where id_categoria = ?");
+            st.setString(1, categoria.getNome());
+            st.setInt(2, categoria.getId());
+            
+            st.executeUpdate();
+        }
+        catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (st!=null)
+                try {st.close();} catch (SQLException e){}
+            if (con!=null)
+                try {con.close();} catch (SQLException e){}
+        }
+    }
+    
     public void remover(int idCategoria){
         Connection con = null;
         PreparedStatement st = null;

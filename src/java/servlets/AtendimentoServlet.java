@@ -7,10 +7,12 @@ package servlets;
 
 import beans.Atendimento;
 import beans.LoginBean;
+import beans.Usuario;
 import facade.AtendimentoFacade;
 import facade.ProdutoFacade;
 import facade.TipoAtendimentoFacade;
 import java.io.IOException;
+import static java.lang.System.out;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -42,20 +44,23 @@ public class AtendimentoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         
-        LoginBean bean = (LoginBean)session.getAttribute("LoginBean"); 
+        Usuario usuario = (Usuario)session.getAttribute("usuario"); 
 
-        //if (bean == null){
-        //    RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-        //    request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema!");
-        //    rd.forward(request, response);
-        //    return;
-        //}
+        if (usuario == null){
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema!");
+            rd.forward(request, response);
+            return;
+        }
+        
+        int idUsuario = (int) usuario.getId();
+        String tipoUsuario = usuario.getTipo();
         
         String action = (String)request.getParameter("action");
         if(null != action){
             switch (action) {
                 case "list":
-                    index(bean.getId(), request, response);
+                    index(idUsuario, tipoUsuario, request, response);
                     return;
                 case "formNew":
                     newObject(request, response);
@@ -64,10 +69,10 @@ public class AtendimentoServlet extends HttpServlet {
                     create(bean.getId(), request, response);
                     return;
                 default:
-                    index(1, request, response);
+                    index(1, tipoUsuario, request, response);
             }
         } else {
-            index(bean.getId(), request, response);
+            index(idUsuario, tipoUsuario, request, response);
         }
     }
     
@@ -86,13 +91,19 @@ public class AtendimentoServlet extends HttpServlet {
         }
     }
     
-    private void index(int usuarioId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void index(int usuarioId, String tipoUsuario, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Atendimento> atendimentos = null;
-                
-        if (usuarioId == 0){
-            atendimentos = AtendimentoFacade.buscarTodos();
+        String tipo = (String)request.getParameter("tipo");
+        
+        if (tipoUsuario.equals("Funcionario")){
+            if (tipo == null || tipo.equals("Abertos")){
+                atendimentos = AtendimentoFacade.buscarAbertos();
+            } else if (tipo.equals("todos")) {
+                atendimentos = AtendimentoFacade.buscarTodos();
+            }
         } else {
             atendimentos = AtendimentoFacade.buscarPorUsuario(usuarioId);
+            
         }
         
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/atendimentos.jsp");

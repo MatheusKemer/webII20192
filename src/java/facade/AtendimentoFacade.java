@@ -26,9 +26,16 @@ public class AtendimentoFacade {
         AtendimentoDAO dao = new AtendimentoDAO();
         dao.inserir(atendimento);
     }
-
-    public static Atendimento buscar(int idAtendimento) {
+    public static List<Atendimento> buscarAbertos() {
         AtendimentoDAO dao = new AtendimentoDAO();
-        return dao.buscar(idAtendimento);
+        return dao.buscarPorStatus("Aberto");
+    }
+    public static List<Atendimento> buscaPorTipo(String tipo) {
+        AtendimentoDAO dao = new AtendimentoDAO();
+        return dao.buscarPorTipo(tipo);
+    }
+    public static List<Atendimento> buscaAbertoPorTipo(String tipo) {
+        AtendimentoDAO dao = new AtendimentoDAO();
+        return dao.buscarAbertoPorTipo(tipo);
     }
 }

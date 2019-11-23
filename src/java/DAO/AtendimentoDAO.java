@@ -146,40 +146,44 @@ public class AtendimentoDAO {
                 try {con.close();} catch (Exception e){}
         }
     }
-
-    public Atendimento buscar(int idAtendimento){
-        Atendimento atendimento = new Atendimento();
-        Produto produto = new Produto();
-        Cliente cliente = new Cliente();
-        TipoAtendimento tipoAtendimento = new TipoAtendimento();
+    
+    public List<Atendimento> buscarPorStatus(String status){
+        List<Atendimento> resultados = new ArrayList<Atendimento>();
         Connection con = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("SELECT id_atendimento, dt_hr_atendimento, dsc_atendimento, res_atendimento, nome_tipo_atendimento, nome_cliente, nome_produto, tb_cliente.id_cliente FROM tb_atendimento, tb_produto, tb_cliente, tb_tipo_atendimento WHERE tb_atendimento.id_atendimento = ? AND tb_atendimento.id_produto= tb_produto.id_produto AND tb_atendimento.id_cliente = tb_cliente.id_cliente AND tb_atendimento.id_tipo_atendimento = tb_tipo_atendimento.id_tipo_atendimento");
-            st.setInt(1, idAtendimento);
+            st = con.prepareStatement("SELECT id_atendimento, dt_hr_atendimento, status_atendimento, dsc_atendimento, tb_atendimento.id_tipo_atendimento, nome_usuario, nome_produto, nome_tipo_atendimento FROM tb_atendimento, tb_produto, tb_usuario, tb_tipo_atendimento WHERE tb_atendimento.status_atendimento = ? AND tb_usuario.id_usuario = tb_atendimento.id_usuario AND tb_produto.id_produto = tb_atendimento.id_produto AND tb_atendimento.id_tipo_atendimento = tb_tipo_atendimento.id_tipo_atendimento ORDER BY tb_atendimento.dt_hr_atendimento");
+            st.setString(1, status);
             
             rs = st.executeQuery();
             while (rs.next()) {
-                atendimento.setId( rs.getInt("id_cliente") );
-                atendimento.setData( rs.getDate("dt_hr_atendimento") );
+                Atendimento atendimento = new Atendimento();
+                atendimento.setId( rs.getInt("id_atendimento") );
+                atendimento.setData( rs.getTimestamp("dt_hr_atendimento") );
                 atendimento.setDesc( rs.getString("dsc_atendimento") );
-                atendimento.setStatus( rs.getString("res_atendimento").charAt(0) );
+                atendimento.setStatus( rs.getString("status_atendimento"));
                 
+                Usuario usuario = new Usuario();
+                usuario.setNome(rs.getString("nome_usuario"));
+                
+                Produto produto = new Produto();
                 produto.setNome(rs.getString("nome_produto"));
-                cliente.setNome(rs.getString("nome_cliente"));
-                tipoAtendimento.setNome("nome_tipo_atendimento");
                 
+                TipoAtendimento tipo = new TipoAtendimento();
+                tipo.setId(rs.getInt("id_tipo_atendimento"));
+                tipo.setNome(rs.getString("nome_tipo_atendimento"));
+                
+                atendimento.setUsuario(usuario);
                 atendimento.setProduto(produto);
-                atendimento.setCliente(cliente);
+                atendimento.setTipoAtendimento(tipo);
+                resultados.add(atendimento);
             }
-            
-            return atendimento;
+            return resultados;
         }
         catch(Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally {
@@ -191,4 +195,103 @@ public class AtendimentoDAO {
                 try {con.close();} catch (Exception e){}
         }
     }
+    
+    public List<Atendimento> buscarPorTipo(String tipoBusca){
+        List<Atendimento> resultados = new ArrayList<Atendimento>();
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("SELECT id_atendimento, dt_hr_atendimento, status_atendimento, dsc_atendimento, tb_atendimento.id_tipo_atendimento, nome_usuario, nome_produto, nome_tipo_atendimento FROM tb_atendimento, tb_produto, tb_usuario, tb_tipo_atendimento WHERE tb_tipo_atendimento.nome_tipo_atendimento = ? AND tb_usuario.id_usuario = tb_atendimento.id_usuario AND tb_produto.id_produto = tb_atendimento.id_produto AND tb_atendimento.id_tipo_atendimento = tb_tipo_atendimento.id_tipo_atendimento ORDER BY tb_atendimento.dt_hr_atendimento");
+            st.setString(1, tipoBusca);
+            
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Atendimento atendimento = new Atendimento();
+                atendimento.setId( rs.getInt("id_atendimento") );
+                atendimento.setData( rs.getTimestamp("dt_hr_atendimento") );
+                atendimento.setDesc( rs.getString("dsc_atendimento") );
+                atendimento.setStatus( rs.getString("status_atendimento"));
+                
+                Usuario usuario = new Usuario();
+                usuario.setNome(rs.getString("nome_usuario"));
+                
+                Produto produto = new Produto();
+                produto.setNome(rs.getString("nome_produto"));
+                
+                TipoAtendimento tipo = new TipoAtendimento();
+                tipo.setId(rs.getInt("id_tipo_atendimento"));
+                tipo.setNome(rs.getString("nome_tipo_atendimento"));
+                
+                atendimento.setUsuario(usuario);
+                atendimento.setProduto(produto);
+                atendimento.setTipoAtendimento(tipo);
+                resultados.add(atendimento);
+            }
+            return resultados;
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (rs!=null)
+                try {rs.close();} catch (Exception e){}
+            if (st!=null)
+                try {st.close();} catch (Exception e){}
+            if (con!=null)
+                try {con.close();} catch (Exception e){}
+        }
+    }
+
+    public List<Atendimento> buscarAbertoPorTipo(String tipoBusca){
+        List<Atendimento> resultados = new ArrayList<Atendimento>();
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("SELECT id_atendimento, dt_hr_atendimento, status_atendimento, dsc_atendimento, tb_atendimento.id_tipo_atendimento, nome_usuario, nome_produto, nome_tipo_atendimento FROM tb_atendimento, tb_produto, tb_usuario, tb_tipo_atendimento WHERE tb_tipo_atendimento.nome_tipo_atendimento = ? AND tb_usuario.id_usuario = tb_atendimento.id_usuario AND tb_produto.id_produto = tb_atendimento.id_produto AND tb_atendimento.id_tipo_atendimento = tb_tipo_atendimento.id_tipo_atendimento AND tb_atendimento.status_atendimento = 'Aberto' ORDER BY tb_atendimento.dt_hr_atendimento");
+            st.setString(1, tipoBusca);
+            
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Atendimento atendimento = new Atendimento();
+                atendimento.setId( rs.getInt("id_atendimento") );
+                atendimento.setData( rs.getTimestamp("dt_hr_atendimento") );
+                atendimento.setDesc( rs.getString("dsc_atendimento") );
+                atendimento.setStatus( rs.getString("status_atendimento"));
+                
+                Usuario usuario = new Usuario();
+                usuario.setNome(rs.getString("nome_usuario"));
+                
+                Produto produto = new Produto();
+                produto.setNome(rs.getString("nome_produto"));
+                
+                TipoAtendimento tipo = new TipoAtendimento();
+                tipo.setId(rs.getInt("id_tipo_atendimento"));
+                tipo.setNome(rs.getString("nome_tipo_atendimento"));
+                
+                atendimento.setUsuario(usuario);
+                atendimento.setProduto(produto);
+                atendimento.setTipoAtendimento(tipo);
+                resultados.add(atendimento);
+            }
+            return resultados;
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (rs!=null)
+                try {rs.close();} catch (Exception e){}
+            if (st!=null)
+                try {st.close();} catch (Exception e){}
+            if (con!=null)
+                try {con.close();} catch (Exception e){}
+        }
+    }
+    
 }

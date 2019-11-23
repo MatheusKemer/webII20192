@@ -205,6 +205,9 @@ $('.prodEdit').click(function() {
     $('.prodChange').each(function() {
         $(this).removeClass('hidden');
     });
+    document.getElementsByName("nome")[0].value = $('#title').html();
+    document.getElementsByName("description")[0].value = $('#desc').html();
+    document.getElementsByName("peso")[0].value = $('#peso').html();
     $(this).addClass('hidden');
     $('.prod-close').addClass('hidden');
     $('.prodCancel').removeClass('hidden');

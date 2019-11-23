@@ -10,7 +10,7 @@
 
 <c:set var="LoginBean" value="${sessionScope.LoginBean}" />
 <c:choose>
-     <c:when test="${LoginBean == null}">
+     <c:when test="${usuario == null}">
         <c:redirect url="/index.jsp">
             <c:param name="msg" value="Usuário deve se autenticar para acessar o sistema!"/>
         </c:redirect>
@@ -20,7 +20,7 @@
 </c:choose>
 
 <header class="gerente-header">
-    <a href="gerente.jsp">Home</a>
+    <a href="GerenteServlet">Home</a>
     <a href="AtendimentoServlet">Atendimentos</a>
     <a href="relatorios.jsp">Relatórios</a>
     <a href="LogoutServlet">Logout</a>
