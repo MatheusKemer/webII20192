@@ -248,6 +248,15 @@ $('.delete-cancel').click(function() {
     $('#delete-id').val('');
 });
 
+$('.delete.status').click(function() {
+    event.preventDefault();
+    $('.modal').removeClass('hidden');
+    $('.modal-delete').removeClass('hidden');
+    var objId = $(this).parents('tr').find("td:first-child").html();
+    $('#delete-id').closest('form').attr('action', 'AtendimentoServlet?action=remove&id=' + objId);
+    $('#delete-id').val('');
+});
+
 //  Formulários
 $('#date-report').click(function(){
     event.preventDefault();
@@ -278,9 +287,10 @@ $('table').DataTable();
 
 $('.questStat').each(function(){
     let status = $(this).html();
-    if(status === 'Concluído'){
+    if(status === 'Fechado'){
         $(this).parents('tr').css('color', 'white');
         $(this).parents('tr').css('background', 'green');
+        $(this).parent().find('.delete.status').removeClass('delete status').addClass('disabled');
     }
     if(status === 'Aberto'){
         var date = $(this).siblings('.questDate').html();
@@ -294,6 +304,7 @@ $('.questStat').each(function(){
         } else {
             $(this).parents('tr').css('background', 'yellow');
         }
+        $(this).parent().find('.delete.status').addClass('canDelete');
     }
 });
 

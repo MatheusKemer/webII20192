@@ -66,7 +66,10 @@ public class AtendimentoServlet extends HttpServlet {
                     newObject(request, response);
                     return;
                 case "new":
-                    create(bean.getId(), request, response);
+                    create(usuario.getId(), request, response);
+                    return;
+                case "remove":
+                    delete(request, response);
                     return;
                 default:
                     index(1, tipoUsuario, request, response);
@@ -95,8 +98,8 @@ public class AtendimentoServlet extends HttpServlet {
         List<Atendimento> atendimentos = null;
         String tipo = (String)request.getParameter("tipo");
         
-        if (tipoUsuario.equals("Funcionario")){
-            if (tipo == null || tipo.equals("Abertos")){
+        if (!tipoUsuario.equals("Cliente")  ){
+            if (tipo == null || tipo.equals("abertos")){
                 atendimentos = AtendimentoFacade.buscarAbertos();
             } else if (tipo.equals("todos")) {
                 atendimentos = AtendimentoFacade.buscarTodos();
@@ -119,6 +122,15 @@ public class AtendimentoServlet extends HttpServlet {
         rd.forward(request, response);
     }
 
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idAtendimento = (String) request.getParameter("id");
+        if (idAtendimento != null){
+            AtendimentoFacade.remover(idAtendimento);
+        }
+        
+        response.sendRedirect("AtendimentoServlet");
+    }
+    
     private void create(int usuarioId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Atendimento atendimento = new Atendimento();
         atendimento.setDesc(request.getParameter("descricao"));

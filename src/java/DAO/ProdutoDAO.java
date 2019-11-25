@@ -70,7 +70,7 @@ public class ProdutoDAO {
             st = con.prepareStatement("INSERT INTO tb_produto (nome_produto, peso_produto, desc_produto, id_categoria) VALUES (?, ?, ?, ?)");
             st.setString(1, produto.getNome());
             st.setInt(2, produto.getPeso());
-            st.setString(1, produto.getDescricao());
+            st.setString(3, produto.getDescricao());
             st.setInt(4, produto.getCategoriaId());
             
             st.executeUpdate();

@@ -120,7 +120,7 @@ public class UsuarioDAO {
         
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("SELECT id_usuario, cpf_usuario, nome_usuario, email_usuario, data_usuario, tb_usuario.id_usuario, tb_usuario.id_cidade, rua_usuario, nr_usuario, cep_usuario, tb_cidade.nome_cidade, tb_cidade.id_estado, nome_estado, sigla_estado FROM tb_usuario, tb_cidade, tb_estado WHERE id_usuario = ? AND tb_usuario.id_cidade = tb_cidade.id_cidade AND tb_cidade.id_estado = tb_estado.id_estado");
+            st = con.prepareStatement("SELECT id_usuario, cpf_usuario, nome_usuario, email_usuario, data_usuario, telefone_usuario, tb_usuario.id_usuario, tb_usuario.id_cidade, rua_usuario, nr_usuario, cep_usuario, tb_cidade.nome_cidade, tb_cidade.id_estado, nome_estado, sigla_estado FROM tb_usuario, tb_cidade, tb_estado WHERE id_usuario = ? AND tb_usuario.id_cidade = tb_cidade.id_cidade AND tb_cidade.id_estado = tb_estado.id_estado");
             st.setInt(1, idUsuario);
             
             rs = st.executeQuery();
@@ -133,6 +133,7 @@ public class UsuarioDAO {
                 usuario.setCidadeId( rs.getInt("id_cidade") );
                 usuario.setCep( rs.getString("cep_usuario") );
                 usuario.setNumero( rs.getString("nr_usuario") );
+                usuario.setTelefone( rs.getString("telefone_usuario") );
                 
                 cidade.setIdEstado( rs.getInt("id_estado"));
                 cidade.setId( Integer.parseInt(rs.getString("id_cidade")));
@@ -221,7 +222,7 @@ public class UsuarioDAO {
 
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("update tb_usuario set nome_usuario = ?, email_usuario = ?, data_usuario = ?, rua_usuario = ?, nr_usuario = ?, cep_usuario = ?, id_cidade = ?, uf_cliente = ? where id_usuario = ?");
+            st = con.prepareStatement("update tb_usuario set nome_usuario = ?, email_usuario = ?, data_usuario = ?, rua_usuario = ?, nr_usuario = ?, cep_usuario = ?, id_cidade = ?, telefone_usuario = ? where id_usuario = ?");
             st.setString(1, usuario.getNome());
             st.setString(2, usuario.getEmail());
             st.setDate(3, (Date) usuario.getData());
@@ -229,7 +230,7 @@ public class UsuarioDAO {
             st.setInt(5, Integer.valueOf(usuario.getNumero()));
             st.setString(6, usuario.getCep());
             st.setInt(7, usuario.getCidadeId());
-            st.setInt(8, usuario.getEstadoId());
+            st.setString(8, usuario.getTelefone());
             st.setInt(9, usuario.getId());
             
             st.executeUpdate();

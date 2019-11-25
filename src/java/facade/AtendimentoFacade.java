@@ -38,4 +38,8 @@ public class AtendimentoFacade {
         AtendimentoDAO dao = new AtendimentoDAO();
         return dao.buscarAbertoPorTipo(tipo);
     }
+    public static void remover(String id){
+        AtendimentoDAO dao = new AtendimentoDAO();
+        dao.remover(Integer.parseInt(id));
+    }
 }

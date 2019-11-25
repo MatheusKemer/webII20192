@@ -22,6 +22,7 @@
 <header class="gerente-header">
     <a href="GerenteServlet">Home</a>
     <a href="AtendimentoServlet">Atendimentos</a>
+    <a href="UsuariosServlet">Usuarios</a>
     <a href="relatorios.jsp">Relatórios</a>
     <a href="LogoutServlet">Logout</a>
 </header>

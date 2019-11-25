@@ -31,7 +31,7 @@ public class AtendimentoDAO {
         
         try {
             con = ConnectionFactory.getConnection();
-            st = con.prepareStatement("SELECT id_atendimento, dt_hr_atendimento, status_atendimento, dsc_atendimento, tb_atendimento.id_tipo_atendimento, nome_usuario, nome_produto, nome_tipo_atendimento FROM tb_atendimento, tb_produto, tb_usuario, tb_tipo_atendimento WHERE tb_usuario.id_usuario = tb_atendimento.id_usuario AND tb_produto.id_produto = tb_atendimento.id_produto AND tb_atendimento.id_tipo_atendimento = tb_tipo_atendimento.id_tipo_atendimento");
+            st = con.prepareStatement("SELECT id_atendimento, dt_hr_atendimento, status_atendimento, dsc_atendimento, tb_atendimento.id_tipo_atendimento, nome_usuario, nome_produto, nome_tipo_atendimento, res_atendimento FROM tb_atendimento, tb_produto, tb_usuario, tb_tipo_atendimento WHERE tb_usuario.id_usuario = tb_atendimento.id_usuario AND tb_produto.id_produto = tb_atendimento.id_produto AND tb_atendimento.id_tipo_atendimento = tb_tipo_atendimento.id_tipo_atendimento");
             
             rs = st.executeQuery();
             while (rs.next()) {
@@ -40,6 +40,7 @@ public class AtendimentoDAO {
                 atendimento.setData( rs.getTimestamp("dt_hr_atendimento") );
                 atendimento.setDesc( rs.getString("dsc_atendimento") );
                 atendimento.setStatus( rs.getString("status_atendimento"));
+                atendimento.setResposta( rs.getString("res_atendimento"));
                 
                 Usuario usuario = new Usuario();
                 usuario.setNome(rs.getString("nome_usuario"));
@@ -294,4 +295,25 @@ public class AtendimentoDAO {
         }
     }
     
+    public void remover(int idAtendimento){
+        Connection con = null;
+        PreparedStatement st = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("delete from tb_atendimento where id_atendimento = ?");
+            st.setInt(1, idAtendimento);
+        
+            st.executeUpdate();
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (st!=null)
+                try {st.close();} catch (Exception e){}
+            if (con!=null)
+                try {con.close();} catch (Exception e){}
+        }
+    }
 }

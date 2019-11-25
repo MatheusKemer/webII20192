@@ -35,8 +35,12 @@ header.cliente-header a, header.funcionario-header a, header.gerente-header a{
     line-height: 5vh;
     border: 0;
 }
-header.gerente-header a, header.funcionario-header a{
+header.funcionario-header a{
     width: 24%;
+}
+
+header.gerente-header a {
+    width: 19%;
 }
 .content{
     position: relative;

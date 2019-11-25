@@ -24,9 +24,9 @@ public class UsuariosFacade {
         UsuarioDAO dao = new UsuarioDAO();
         dao.atualizar(usuario);
     }
-    public static Usuario buscar(String id){
+    public static Usuario buscar(int id){
         UsuarioDAO dao = new UsuarioDAO();
-        return dao.buscaUsuario(Integer.parseInt(id));
+        return dao.buscaUsuario(id);
     }
     public static List<Usuario> buscarTodos(){
         UsuarioDAO dao = new UsuarioDAO();

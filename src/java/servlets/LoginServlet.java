@@ -61,10 +61,10 @@ public class LoginServlet extends HttpServlet {
                    response.sendRedirect("AtendimentoServlet");
                    break;
                 case("Cliente"):
-                   response.sendRedirect("cliente.jsp");
+                   response.sendRedirect("AtendimentoServlet");
                    break;
                 default:
-                   response.sendRedirect("cliente.jsp");
+                   response.sendRedirect("AtendimentoServlet");
            }  
         }
         else {

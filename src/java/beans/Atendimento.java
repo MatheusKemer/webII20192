@@ -25,6 +25,7 @@ public class Atendimento implements Serializable {
     public int produtoId;
     public int usuarioId;
     public int tipoAtendimentoId;
+    public String resposta;
 
     public int getId() {
         return id;
@@ -113,4 +114,13 @@ public class Atendimento implements Serializable {
     public void setTipoAtendimento(TipoAtendimento tipoAtendimento) {
         this.tipoAtendimento = tipoAtendimento;
     }
+
+    public String getResposta() {
+        return resposta;
+    }
+
+    public void setResposta(String resposta) {
+        this.resposta = resposta;
+    }
+    
 }

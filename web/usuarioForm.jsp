@@ -1,4 +1,5 @@
 <%@taglib prefix="c"uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <h2><c:out value="${titleLabel}" /></h2>
 <form action="<c:out value="${action}" />" method="post">
@@ -15,17 +16,17 @@
             
     <div class="form-group">
         <label>Email</label>
-        <input type="text" name="email" class="form-control" maxlength="100" value="<c:out value="${cliente.email}" />" required>
+        <input type="text" name="email" class="form-control" maxlength="100" value="<c:out value="${cliente.email}" />" value="<c:out value="${cliente.cpf}" />" <c:if test="${editing}"><c:out value="disabled" /></c:if> required>
     </div>
 
     <div class="form-group">
         <label>CPF</label>
-        <input id="cpf" type="text" name="cpf" class="form-control" maxlength="11" value="<c:out value="${cliente.cpf}" />" required>
+        <input id="cpf" type="text" name="cpf" class="form-control" maxlength="11" value="<c:out value="${cliente.cpf}" />" <c:if test="${editing}"><c:out value="disabled" /></c:if> required>
     </div>
 
     <div class="form-group">
         <label>Data</label>
-        <input type="date" name="data" class="form-control" value="<c:out value="${cliente.data}" />" required>
+        <input type="date" name="data" class="form-control" value="<fmt:formatDate value="${cliente.data}" pattern="dd/MM/yyyy" />" required>
     </div>
 
     <div class="form-group">
