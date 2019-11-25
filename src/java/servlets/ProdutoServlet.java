@@ -18,7 +18,10 @@ import facade.UsuariosFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.System.out;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,10 +61,14 @@ public class ProdutoServlet extends HttpServlet {
         }
         
         String action = (String)request.getParameter("action");
+        String msg = (String)request.getParameter("msg");
+        if(msg == null){
+            msg = "";
+        }
         if(null != action){
             switch (action) {
                 case "list":
-                    index(request, response);
+                    index(msg, request, response);
                     return;
                 case "formUpdate":
                     edit(request, response);
@@ -79,14 +86,14 @@ public class ProdutoServlet extends HttpServlet {
                     create(request, response);
                     return;
                 default:
-                    index(request, response);
+                    index(msg, request, response);
             }
         } else {
-            index(request, response);
+            index(msg, request, response);
         }
     }
 
-    private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void index(String msg, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Produto> produtosCadastrados = ProdutoFacade.buscarTodos();
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/produtos.jsp");
         request.setAttribute("listagemProdutos", produtosCadastrados);
@@ -104,39 +111,28 @@ public class ProdutoServlet extends HttpServlet {
     }
     
     private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cliente cliente = null;
-                    
-        String idCliente = (String) request.getParameter("id");
-        if (idCliente != null){
-            //cliente = UsuariosFacade.buscar(idCliente);
-        }
-
-        if (cliente != null){
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/clientesForm.jsp");
-            request.setAttribute("produto", produto);
-            request.setAttribute("editing", true);
-            request.setAttribute("action", "ClientesServlet?action=update");
-            request.setAttribute("estados", EstadoFacade.listar());
-            request.setAttribute("cidades", CidadesFacade.listarTodasDoEstado(String.valueOf(cliente.getCidade().getEstado().getId())));
-            request.setAttribute("titleLabel", "Editando Cliente");
-            rd.forward(request, response);
-        }        
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idProduto = (String) request.getParameter("id");
+        String msg = "";
         if (idProduto != null){
-            ProdutoFacade.remover(idProduto);
+            try {
+                ProdutoFacade.remover(idProduto);
+                msg = "Produto excluido com sucesso!";
+            } catch (SQLException ex) {
+                msg = "O produto ja existe em um atendimento";
+            }
         }
         
-        response.sendRedirect("ProdutoServlet");
+        response.sendRedirect("ProdutoServlet?msg=" + msg);
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Produto produto = new Produto();
         produto = getProdutoParameters(request);
         ProdutoFacade.alterar(produto);
-        out.println("O PRODUTO " + produto.getNome() + " COM DESCRICAO " + produto.getDescricao() + " E PESO " + produto.getPeso());
+        
         response.sendRedirect("ProdutoServlet");
     }
 

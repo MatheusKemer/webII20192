@@ -42,4 +42,8 @@ public class AtendimentoFacade {
         AtendimentoDAO dao = new AtendimentoDAO();
         dao.remover(Integer.parseInt(id));
     }
+    public static void responder(int idAtendimento, String reply) {
+        AtendimentoDAO dao = new AtendimentoDAO();
+        dao.responder(idAtendimento, reply);
+    }
 }

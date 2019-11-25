@@ -86,7 +86,7 @@ public class ProdutoDAO {
         }
     }
     
-    public void remover(int idProduto){
+    public void remover(int idProduto) throws SQLException{
         Connection con = null;
         PreparedStatement st = null;
         
@@ -96,9 +96,6 @@ public class ProdutoDAO {
             st.setInt(1, idProduto);
         
             st.executeUpdate();
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
         }
         finally {
             if (st!=null)

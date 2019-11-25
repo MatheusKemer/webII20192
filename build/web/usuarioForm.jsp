@@ -1,13 +1,32 @@
 <%@taglib prefix="c"uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+ <c:choose>
+    <c:when test="${usuario.tipo == \"Gerente\"}">
+       <c:import url="/cabecalho_gerente.jsp"/>
+    </c:when>
+    <c:when test="${usuario.tipo == \"Cliente\"}">
+       <c:import url="/cabecalho_cliente.jsp"/>
+    </c:when>
+    <c:otherwise>
+    </c:otherwise>
+</c:choose>
+
 <h2><c:out value="${titleLabel}" /></h2>
-<form action="<c:out value="${action}" />" method="post">
+<fmt:formatDate value="${cliente.data}" />
+<form action="<c:out value="${action}" />" method="POST">
     <c:choose>
         <c:when test="${editing == true}">
             <input type="hidden" name="id" value="<c:out value="${cliente.id}" />"/>
         </c:when>
     </c:choose>
+            
+    <c:if test="${usuario.tipo.equals(\"Gerente\")}" >
+        <select name="tipo" name="tipo" value="">
+            <option value="Gerente" <c:if test="${cliente.tipo.equals(\"Gerente\")}"> <c:out value="selected" /></c:if> > Gerente </option>
+            <option value="Funcionario" <c:if test="${cliente.tipo.equals(\"Funcionario\")}"> <c:out value="selected" /> </c:if> > Funcionário </option>
+        </select>
+    </c:if>
             
     <div class="form-group">
         <label>Nome</label>
@@ -16,22 +35,22 @@
             
     <div class="form-group">
         <label>Email</label>
-        <input type="text" name="email" class="form-control" maxlength="100" value="<c:out value="${cliente.email}" />" value="<c:out value="${cliente.cpf}" />" <c:if test="${editing}"><c:out value="disabled" /></c:if> required>
+        <input type="text" name="email" class="form-control" maxlength="100" value="<c:out value="${cliente.email}" />" value="<c:out value="${cliente.cpf}" />" <c:if test="${editing}"><c:out value="readonly" /></c:if> required>
     </div>
 
     <div class="form-group">
         <label>CPF</label>
-        <input id="cpf" type="text" name="cpf" class="form-control" maxlength="11" value="<c:out value="${cliente.cpf}" />" <c:if test="${editing}"><c:out value="disabled" /></c:if> required>
+        <input id="cpf" type="text" name="cpf" class="form-control" maxlength="14" value="<c:out value="${cliente.cpf}" />" <c:if test="${editing}"><c:out value="readonly" /></c:if> required>
     </div>
 
     <div class="form-group">
         <label>Data</label>
-        <input type="date" name="data" class="form-control" value="<fmt:formatDate value="${cliente.data}" pattern="dd/MM/yyyy" />" required>
+        <input type="date" name="data" class="form-control" value="<fmt:formatDate value="${cliente.data}" />" required>
     </div>
 
     <div class="form-group">
         <label>CEP</label>
-        <input id="cep" type="text" name="cep" maxlength="8" class="form-control" value="<c:out value="${cliente.cep}" />" required>
+        <input id="cep" type="text" name="cep" maxlength="10" class="form-control" value="<c:out value="${cliente.cep}" />" required>
     </div>
 
     <div class="form-group">
@@ -69,7 +88,7 @@
     
     <div class="form-group">
         <label>Telefone</label>
-        <input name="telefone" type="phone" id="phone" placeholder="Telefone" value="<c:out value="${usuario.telefone}" />">
+        <input name="telefone" type="phone" id="phone" placeholder="Telefone" value="<c:out value="${cliente.telefone}" />">
     </div>
     <div class="form-group">
         <label>Senha</label>

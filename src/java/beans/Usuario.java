@@ -10,7 +10,12 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -107,7 +112,7 @@ public class Usuario implements Serializable{
     }
 
     public void setCpf(String cpf) {
-        this.cpf = cpf.replaceAll("\\D+","");;
+        this.cpf = cpf.replaceAll("\\D+","");
     }
 
     public void setNome(String nome) {
@@ -216,5 +221,14 @@ public class Usuario implements Serializable{
 
     public void setBairro(String bairro) {
         this.bairro = bairro;
+    }
+
+    public void setStringData(String date) {
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+        try {
+            this.data = (Date)formatter.parse(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

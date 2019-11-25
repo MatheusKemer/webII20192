@@ -7,6 +7,7 @@ package facade;
 
 import DAO.ProdutoDAO;
 import beans.Produto;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class ProdutoFacade {
         ProdutoDAO dao = new ProdutoDAO();
         dao.atualizar(produto);
     }
-    public static void remover(String id){
+    public static void remover(String id) throws SQLException{
         ProdutoDAO dao = new ProdutoDAO();
         dao.remover(Integer.parseInt(id));
     }

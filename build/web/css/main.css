@@ -108,6 +108,21 @@ a, button, .button{
     margin: 20px auto;
     cursor: pointer;
 }
+
+a.none{
+    display: block;
+    text-decoration: none;
+    text-transform: initial;
+    background: initial;
+    border:initial;
+    border-radius: initial;
+    padding: initial;
+    color: blue;
+    width: initial;
+    margin: initial;
+    cursor: pointer;   
+}
+
 a:hover, button:hover{
     transform: scale(1.1);
     background: #fff7e0;
