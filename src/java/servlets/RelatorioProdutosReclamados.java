@@ -27,16 +27,14 @@ import net.sf.jasperreports.engine.JasperRunManager;
  * @author matheus
  */
 
-@WebServlet(urlPatterns={"/RelatorioTipoAtendimento"})
-public class RelatorioTipoAtendimento extends HttpServlet{
+@WebServlet(urlPatterns={"/RelatorioProdutosReclamados"})
+public class RelatorioProdutosReclamados extends HttpServlet{
  protected void processRequest(HttpServletRequest request,
     HttpServletResponse response)
     throws ServletException, IOException {
     Connection con = null;
     try {
     
-        String type = request.getParameter("tipo");
-        
         // Conexão com o banco
         Class.forName("org.postgresql.Driver");
         con = DriverManager.getConnection(
@@ -44,14 +42,9 @@ public class RelatorioTipoAtendimento extends HttpServlet{
         "admin", "nimda"); 
 
         // Caminho contextualizado do relatório compilado
+        String jasper = request.getContextPath() +
+        "/ProdutosReclamados.jasper";
         
-        String jasper = "";
-        
-        if (type.equals("finalizado")){
-            jasper = request.getContextPath() + "/Finalizado.jasper";
-        } else {
-            jasper = request.getContextPath() + "/NaoFinalizado.jasper";
-        }
         // Host onde o servlet esta executando
         String host = "http://" + request.getServerName() +
         ":" + request.getServerPort();

@@ -27,8 +27,8 @@ import net.sf.jasperreports.engine.JasperRunManager;
  * @author matheus
  */
 
-@WebServlet(urlPatterns={"/RelatorioAtendimento"})
-public class RelatorioAtendimento extends HttpServlet{
+@WebServlet(urlPatterns={"/RelatorioAtendimentosAbertos"})
+public class RelatorioAtendimentosAbertos extends HttpServlet{
  protected void processRequest(HttpServletRequest request,
     HttpServletResponse response)
     throws ServletException, IOException {
@@ -43,7 +43,7 @@ public class RelatorioAtendimento extends HttpServlet{
 
         // Caminho contextualizado do relatório compilado
         String jasper = request.getContextPath() +
-        "/AtendimentosResolvidos.jasper";
+        "/AtendimentosAbertos.jasper";
         
         // Host onde o servlet esta executando
         String host = "http://" + request.getServerName() +
