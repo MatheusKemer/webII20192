@@ -33,6 +33,7 @@ public class RelatorioReclamacoes extends HttpServlet{
     HttpServletResponse response)
     throws ServletException, IOException {
     Connection con = null;
+    String status_atendimento = request.getParameter("status");
     
     try {
     

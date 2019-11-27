@@ -21,20 +21,20 @@
             </div>
             <div class="modal hidden">
                 <div class="modal-body date-modal hidden">
-                    <form>
-                        <p>Data inicial: <input class='datepicker' type="text"></p>
-                        <p>Data final: <input class='datepicker' type="text"></p>
+                    <form action="RelatorioAtendimentosAbertos" method="post">
+                        <p>Data inicial: <input class='datepicker' name ="dataIni" type="text"></p>
+                        <p>Data final: <input class='datepicker' name ="dataFin" type="text"></p>
                         <button type="submit">Gerar Relatório</button>
                         <button id="date-modal-close" type="submit">Fechar</button>
                     </form>
                 </div>
                 <div class="modal-body quest-modal hidden">
-                    <form>
+                    <form action="RelatorioReclamacoes" method="post">
                         <span>Situação:</span>
-                        <select>
-                            <option>Todas</option>
-                            <option>Em aberto</option>
-                            <option>Finalizadas</option>
+                        <select name="status">
+                            <option value="1">Todas</option>
+                            <option value="2">Em aberto</option>
+                            <option value="3">Finalizadas</option>
                         </select>
                         <button type="submit">Gerar Relatório</button>                        
                         <button id="quest-modal-close" type="submit">Fechar</button>
