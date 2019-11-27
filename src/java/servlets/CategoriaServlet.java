@@ -16,7 +16,10 @@ import facade.UsuariosFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.System.out;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -99,33 +102,22 @@ public class CategoriaServlet extends HttpServlet {
         rd.forward(request, response);
     }
     
-    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cliente cliente = null;
-                    
-        String idCliente = (String) request.getParameter("id");
-        if (idCliente != null){
-            //cliente = UsuariosFacade.buscar(idCliente);
-        }
-
-        if (cliente != null){
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/clientesForm.jsp");
-            request.setAttribute("cliente", cliente);
-            request.setAttribute("editing", true);
-            request.setAttribute("action", "ClientesServlet?action=update");
-            request.setAttribute("estados", EstadoFacade.listar());
-            request.setAttribute("cidades", CidadesFacade.listarTodasDoEstado(String.valueOf(cliente.getCidade().getEstado().getId())));
-            request.setAttribute("titleLabel", "Editando Cliente");
-            rd.forward(request, response);
-        }        
+    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {    
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idCategoria = (String) request.getParameter("id");
+        String msg = "";
         if (idCategoria != null){
-            CategoriaFacade.remover(idCategoria);
+            try {
+                CategoriaFacade.remover(idCategoria);
+                msg = "Categoria removida com sucesso!";
+            } catch (SQLException ex) {
+                msg = "Impossivel remover! Ja existe um produto com esta categoria.";
+            }
         }
         
-        response.sendRedirect("CategoriaServlet");
+        response.sendRedirect("CategoriaServlet?msg=" + msg);
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -11,8 +11,15 @@
     </head>
     <body>
         <div class="content">
-            <c:import url="/cabecalho_cliente.jsp"/>
-            <c:set var="cliente" value="${sessionScope.Usuario}" scope="session" />
+            <c:choose>
+                <c:when test="${usuario.getTipo() == \"Gerente\"}">
+                   <c:import url="/cabecalho_gerente.jsp"/>
+                </c:when>
+                <c:otherwise>
+                    <c:import url="/cabecalho_cliente.jsp"/>
+                </c:otherwise>
+            </c:choose>
+            <c:set var="cliente" value="${cliente}" />
             
             <div class="form-holder">
                 <c:import url="/usuarioForm.jsp"/>

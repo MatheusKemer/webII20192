@@ -95,7 +95,7 @@ public class CategoriaDAO {
         }
     }
     
-    public void remover(int idCategoria){
+    public void remover(int idCategoria) throws SQLException{
         Connection con = null;
         PreparedStatement st = null;
         
@@ -105,9 +105,6 @@ public class CategoriaDAO {
             st.setInt(1, idCategoria);
         
             st.executeUpdate();
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
         }
         finally {
             if (st!=null)

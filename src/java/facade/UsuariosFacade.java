@@ -8,6 +8,7 @@ package facade;
 import DAO.UsuarioDAO;
 import beans.Usuario;
 import static java.lang.System.out;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  */
 
 public class UsuariosFacade {
-    public static void inserir(Usuario usuario){
+    public static void inserir(Usuario usuario) throws SQLException{
         UsuarioDAO dao = new UsuarioDAO();
         dao.inserir(usuario);
     }
@@ -31,6 +32,10 @@ public class UsuariosFacade {
     public static List<Usuario> buscarTodos(){
         UsuarioDAO dao = new UsuarioDAO();
         return dao.buscarTodos();
+    }
+    public static List<Usuario> buscarAdmins(){
+        UsuarioDAO dao = new UsuarioDAO();
+        return dao.buscarAdmins();
     }
     public static void remover(String id){
         UsuarioDAO dao = new UsuarioDAO();

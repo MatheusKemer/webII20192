@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="content">
-            <c:import url="/cabecalho_cliente.jsp"/>
+            <c:import url="/cabecalho_gerente.jsp"/>
             
             <div class="form-holder">
                 <h1>Usuários</h1>
@@ -26,39 +26,28 @@
                     <th>Excluir</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>01</td>
-                            <td>João</td>
-                            <td>jonnes@gmail.com</td>
-                            <td>657.404.620-37</td>
-                            <td>Gerente</td>
-                            <td><button class="userEdit">Editar</button></td>
-                            <td class="disabled">X</td>
-                        </tr>
-                        <tr>
-                            <td>02</td>
-                            <td>Maria</td>
-                            <td>mary_jane@gmail.com</td>
-                            <td>663.634.200-59</td>
-                            <td>Funcionário</td>
-                            <td><button class="userEdit">Editar</button></td>
-                            <td class="delete">X</td>
-                        </tr>
-                        <tr>
-                            <td>03</td>
-                            <td>Larissa</td>
-                            <td>larissinha@gmail.com</td>
-                            <td>860.765.530-22</td>
-                            <td>Cliente</td>
-                            <td><button class="userEdit">Editar</button></td>
-                            <td class="delete">X</td>
-                        </tr>
+                        <c:forEach items="${listagemUsuarios}" var="usuario" >
+                            <tr>
+                                <td><c:out value="${usuario.id}" /></td>
+                                <td id="type${usuario.id}"><c:out value="${usuario.nome}" /></td>
+                                <td id="title${usuario.id}"><c:out value="${usuario.email}" /></td>
+                                <td id="cpf${usuario.id}"><c:out value="${usuario.cpf}" /></td>
+                                <td id="peso${usuario.id}"><c:out value="${usuario.tipo}" /></td>
+                                <td><a class="none" href="UsuariosServlet?action=formUpdate&id=${usuario.id}" class="userEdit">Editar</a></td>
+                                <td class='<c:if test="${currentUser.id != usuario.id}"><c:out value="delete user" /></c:if>'>X</td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
-                <form id="edit-user-form" class="hidden">
-                    <input type="text" id="edit-user-id">
-                    <input type="submit" id="edit-user-go">
-                </form>
+                <a href="UsuariosServlet?action=formNew">Novo Usuário</a>
+                <div class="modal-delete hidden">
+                    <h2>Deseja mesmo excluir este usuário?</h2>
+                    <button class="delete-cancel">Cancelar</button>
+                    <form method="POST">
+                        <input class="hidden" id="delete-id">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </div>
             </div>
         </div>
         <script src="js/libs/JQuery/jquery.min.js"></script>

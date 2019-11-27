@@ -71,8 +71,11 @@ public class AtendimentoServlet extends HttpServlet {
                 case "remove":
                     delete(request, response);
                     return;
+                case "answer":
+                    answer(request, response);
+                    return;
                 default:
-                    index(1, tipoUsuario, request, response);
+                    index(idUsuario, tipoUsuario, request, response);
             }
         } else {
             index(idUsuario, tipoUsuario, request, response);
@@ -105,8 +108,7 @@ public class AtendimentoServlet extends HttpServlet {
                 atendimentos = AtendimentoFacade.buscarTodos();
             }
         } else {
-            atendimentos = AtendimentoFacade.buscarPorUsuario(usuarioId);
-            
+            atendimentos = AtendimentoFacade.buscarPorUsuario(usuarioId);   
         }
         
         RequestDispatcher rd = getServletContext().getRequestDispatcher("/atendimentos.jsp");
@@ -144,6 +146,19 @@ public class AtendimentoServlet extends HttpServlet {
         AtendimentoFacade.inserir(atendimento);
         
         response.sendRedirect("AtendimentoServlet?action=index");
+    }
+    
+    private void answer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Atendimento atendimento = null;
+                    
+        String idAtendimento = (String) request.getParameter("id");
+        String reply = (String) request.getParameter("reply");
+        
+        if (idAtendimento != null){
+            AtendimentoFacade.responder(Integer.parseInt(idAtendimento), reply);
+        }
+        
+        response.sendRedirect("AtendimentoServlet");
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

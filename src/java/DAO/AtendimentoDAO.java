@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -295,7 +296,7 @@ public class AtendimentoDAO {
         }
     }
     
-    public void remover(int idAtendimento){
+    public void remover(int idAtendimento) throws SQLException{
         Connection con = null;
         PreparedStatement st = null;
         
@@ -303,6 +304,26 @@ public class AtendimentoDAO {
             con = ConnectionFactory.getConnection();
             st = con.prepareStatement("delete from tb_atendimento where id_atendimento = ?");
             st.setInt(1, idAtendimento);
+        
+            st.executeUpdate();
+        }
+        finally {
+            if (st!=null)
+                try {st.close();} catch (Exception e){}
+            if (con!=null)
+                try {con.close();} catch (Exception e){}
+        }
+    }
+    
+    public void responder(int idAtendimento, String resposta){
+        Connection con = null;
+        PreparedStatement st = null;
+        
+        try {
+            con = ConnectionFactory.getConnection();
+            st = con.prepareStatement("update tb_atendimento set res_atendimento = ?, status_atendimento = 'Fechado' where id_atendimento = ?");
+            st.setString(1, resposta);
+            st.setInt(2, idAtendimento);
         
             st.executeUpdate();
         }

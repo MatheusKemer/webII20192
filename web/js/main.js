@@ -126,10 +126,14 @@ $('.questionView').click(function() {
     $('#product').html($('#product'+id).html());
     $('#question').html($('#question'+id).html());
     $('#answer').html($('#answer'+id).html());
+    debugger
     $('#answer').html() !== '' && $('.questReply').addClass('hidden');
     $('#callID').val(id);
     $('.modal').removeClass('hidden');
     $('.modal-body').removeClass('hidden');
+    
+    var objId = $(this).parents('tr').find("td:first-child").html();
+    $('#atendimento-id').closest('form').attr('action', 'AtendimentoServlet?action=answer&id=' + objId);
 });
 $('.modal-close').click(function() {
     event.preventDefault();
@@ -241,6 +245,15 @@ $('.delete.cat').click(function() {
     $('#delete-id').val(objId);
 });
 
+$('.delete.user').click(function() {
+    event.preventDefault();
+    $('.modal').removeClass('hidden');
+    $('.modal-delete').removeClass('hidden');
+    var objId = $(this).parents('tr').find("td:first-child").html();
+    $('#delete-id').closest('form').attr('action', 'UsuariosServlet?action=remove&id=' + objId);
+    $('#delete-id').val(objId);
+});
+
 $('.delete-cancel').click(function() {
     event.preventDefault();
     $('.modal').addClass('hidden');
@@ -283,7 +296,9 @@ $('#quest-modal-close').click(function(){
 });
 
 //  Tabelas
-$('table').DataTable();
+$('table').DataTable({
+    "order": [[ 3, "asc" ]]
+});
 
 $('.questStat').each(function(){
     let status = $(this).html();

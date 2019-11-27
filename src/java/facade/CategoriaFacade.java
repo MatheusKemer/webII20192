@@ -7,6 +7,7 @@ package facade;
 
 import DAO.CategoriaDAO;
 import beans.Categoria;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class CategoriaFacade {
         CategoriaDAO dao = new CategoriaDAO();
         dao.atualizar(categoria);
     }
-    public static void remover(String id){
+    public static void remover(String id) throws SQLException{
         CategoriaDAO dao = new CategoriaDAO();
         dao.remover(Integer.parseInt(id));
     }

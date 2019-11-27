@@ -73,6 +73,15 @@
                     <p>Concluído em: <span id="closeDate"></span></p>
                     <p>Solicitação: <br /><span id="question"></span></p>
                     <p>Resposta do atendimento: <br /><span id="answer"></span></p>
+                    <c:if test="${(usuario.getTipo() == \"Funcionario\")}">
+                        <div class="questReply">
+                            <form method="POST">
+                                <input class="hidden" id="atendimento-id" />
+                                <input name="reply" class="" required />
+                                <button type="submit"> Responder </button>
+                            </form>
+                        </div>
+                    </c:if>
                     <button class="modal-close">Fechar</button>
                 </div>
             </div>
