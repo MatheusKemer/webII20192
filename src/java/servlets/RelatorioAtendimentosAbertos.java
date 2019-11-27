@@ -34,10 +34,8 @@ public class RelatorioAtendimentosAbertos extends HttpServlet{
     HttpServletResponse response)
     throws ServletException, IOException {
     Connection con = null;
-    Date from_date = dataIni.getDate();
-    Date to_date = dataFin.getDate();
-    java.sql.Date dataIni = new java.sql.Date(from_date.getTime());
-    java.sql.Date dataFin = new java.sql.Date(to_date.getTime());
+    String dataIni = request.getParameter("dataIni".toString());
+    String dataFin = request.getParameter("dataFin".toString());
     
     try {
     

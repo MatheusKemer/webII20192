@@ -14,8 +14,8 @@
             <c:import url="/cabecalho_gerente.jsp"/>
             <div class="form-holder">
                 <h1>Relatórios</h1>
-                <button>Funcionários</button>
-                <button>Produtos mais reclamados</button>
+                <a class="button" href="RelatorioFuncionarios">Funcionários</a>
+                <a class="button" href="RelatorioProdutosReclamados">Produtos mais reclamados</a>
                 <button id='date-report'>Atendimento por data</button>
                 <button id='quest-report'>Reclamações</button>
             </div>

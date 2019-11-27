@@ -55,9 +55,19 @@ public class RelatorioReclamacoes extends HttpServlet{
         URL jasperURL = new URL(host + jasper);
         
         // Parâmetros do relatório
-        HashMap params = new HashMap();
-        params.put("tpAtendimentoInf", status_atendimento);
-        
+        HashMap<String, String> params = new HashMap();
+        String value2 = "2";
+        String value3 = "3";
+        if (status_atendimento.equals(value3)){
+        params.put("tpAtendimentoInf1", "Fechado");
+        params.put("tpAtendimentoInf2", "Fechado");
+    } else if (status_atendimento.equals(value2)){
+        params.put("tpAtendimentoInf1", "Aberto");
+        params.put("tpAtendimentoInf2", "Aberto");
+    } else {
+        params.put("tpAtendimentoInf1", "Aberto");
+        params.put("tpAtendimentoInf2", "Fechado");
+    }    
         // Geração do relatório
         byte[] bytes = JasperRunManager.runReportToPdf(
         jasperURL.openStream(), params, con);
