@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -33,6 +34,11 @@ public class RelatorioAtendimentosAbertos extends HttpServlet{
     HttpServletResponse response)
     throws ServletException, IOException {
     Connection con = null;
+    Date from_date = dataIni.getDate();
+    Date to_date = dataFin.getDate();
+    java.sql.Date dataIni = new java.sql.Date(from_date.getTime());
+    java.sql.Date dataFin = new java.sql.Date(to_date.getTime());
+    
     try {
     
         // Conexão com o banco
@@ -54,6 +60,8 @@ public class RelatorioAtendimentosAbertos extends HttpServlet{
         
         // Parâmetros do relatório
         HashMap params = new HashMap();
+        params.put("dataIni", dataIni);
+        params.put("dataFin", dataFin);
         
         // Geração do relatório
         byte[] bytes = JasperRunManager.runReportToPdf(

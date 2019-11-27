@@ -33,6 +33,7 @@ public class RelatorioReclamacoes extends HttpServlet{
     HttpServletResponse response)
     throws ServletException, IOException {
     Connection con = null;
+    
     try {
     
         // Conexão com o banco
@@ -54,6 +55,7 @@ public class RelatorioReclamacoes extends HttpServlet{
         
         // Parâmetros do relatório
         HashMap params = new HashMap();
+        params.put("tpAtendimentoInf", status_atendimento);
         
         // Geração do relatório
         byte[] bytes = JasperRunManager.runReportToPdf(
